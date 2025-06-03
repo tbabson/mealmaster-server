@@ -6,25 +6,9 @@ import Reminder from '../models/ReminderModel.js';
 import { transporter } from '../utils/transporter.js';
 import moment from 'moment-timezone';
 import { google } from 'googleapis';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs';
 import webPush from 'web-push';
 import Subscription from '../models/SubscriptionModel.js';
 import User from '../models/UserSchema.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Set up token paths
-const TOKEN_DIRECTORY = path.join(__dirname, '..', 'utils', 'tokens');
-const TOKEN_PATH = path.join(TOKEN_DIRECTORY, 'google_calendar_token.json');
-
-// Ensure token directory exists
-if (!fs.existsSync(TOKEN_DIRECTORY)) {
-  fs.mkdirSync(TOKEN_DIRECTORY, { recursive: true });
-}
 
 // ----- Google API Setup -----
 const oauth2Client = new google.auth.OAuth2(
