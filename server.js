@@ -69,7 +69,7 @@ initializeReminderSystem(); // Start the reminder scheduler
 // }));
 
 app.use(cors({
-  origin: ['https://your-frontend-domain.vercel.app', 'http://localhost:5173'],
+  origin: ['https://client-amber-nu.vercel.app', 'http://localhost:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
