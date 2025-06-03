@@ -60,15 +60,11 @@ if (process.env.NODE_ENV === 'development') {
 
 initializeReminderSystem(); // Start the reminder scheduler
 
-app.use(express.static(path.resolve(__dirname, 'client/dist')));
-
-// Updated CORS configuration
+// API CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.CLIENT_URL
-    : ['http://localhost:5173', 'http://localhost:5000'],
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -123,11 +119,35 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/payment', paymentRoutes);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'));
+// API Documentation Route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the Meal Master API',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/v1/auth',
+      meals: '/api/v1/meals',
+      blogs: '/api/v1/blogs',
+      ingredients: '/api/v1/ingredients',
+      preparationSteps: '/api/v1/preparationSteps',
+      shoppingLists: '/api/v1/shoppingLists',
+      orders: '/api/v1/orders',
+      reminders: '/api/v1/reminders',
+      reviews: '/api/v1/reviews',
+      users: '/api/v1/users',
+      cart: '/api/v1/cart',
+      payment: '/api/v1/payment'
+    }
+  });
 });
 
-
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: 'The requested resource does not exist'
+  });
+});
 
 app.use(errorHandlerMiddleware);
 
